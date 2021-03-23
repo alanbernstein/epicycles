@@ -8,14 +8,14 @@ In short:
 
 1. Think of the 2d path as a "1d complex" signal
 
-    x, y = f(t), g(t)
-    z = f(t) + j*g(t)
-    Z = fft(z)
+  - `x, y = f(t), g(t)`
+  - `z = f(t) + j*g(t)`
+  - `Z = fft(z)`
    
 2. Write the inverse transform in terms of the fourier series magnitudes and phases:
 
-    z[k] = sum(Z[n] * exp(1j*2*pi/N * k * n) )  # note this is pythonish pseudocode
-    z[k] = sum(magnitude[n] * exp(1j*2*pi/N*k*phase[n]) * exp(1j*2*pi/N * k * n) )
+  - `z[k] = sum(Z[n] * exp(1j*2*pi/N * k * n) )  # note this is pythonish pseudocode`
+  - `z[k] = sum(magnitude[n] * exp(1j*2*pi/N*k*phase[n]) * exp(1j*2*pi/N * k * n) )`
 
 Where `magnitude[n]` is equivalent to the radius of the circle that spins with frequency n.
 
