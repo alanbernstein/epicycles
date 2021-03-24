@@ -1,70 +1,56 @@
-import time
-
 import numpy as np
 import matplotlib.pyplot as plt
-import scipy.signal
-
-from ipdb import set_trace as db
-from panda.debug import pm
+np.set_printoptions(suppress=True)
 
 
-@pm
+N = 128
+t = np.linspace(0, 2*np.pi, N+1)
+
+
 def main():
-    N = 100
+    x, y = square_trajectory(N)
+    animate_epicycles(x, y)
 
-    tvec = np.linspace(0, 2*np.pi, N)
 
-    r = (((0.0*np.pi<=tvec) * (tvec<=0.5*np.pi)) * 1/np.cos(tvec-0.25*np.pi) +
-         ((0.5*np.pi<tvec) * (tvec<=1.0*np.pi)) * 1/np.cos(tvec-0.75*np.pi) +
-         ((1.0*np.pi<tvec) * (tvec<=1.5*np.pi)) * 1/np.cos(tvec-1.25*np.pi) +
-         ((1.5*np.pi<tvec) * (tvec<=2.0*np.pi)) * 1/np.cos(tvec-1.75*np.pi)
-         )
-    x_orig, y_orig = np.cos(tvec) * r, np.sin(tvec) * r
-    z = x_orig + 1j*y_orig
+def square_trajectory(N):
+    r = (((0.0*np.pi<=t) * (t<=0.5*np.pi)) * 1/np.cos(t-0.25*np.pi) +
+         ((0.5*np.pi<t) * (t<=1.0*np.pi)) * 1/np.cos(t-0.75*np.pi) +
+         ((1.0*np.pi<t) * (t<=1.5*np.pi)) * 1/np.cos(t-1.25*np.pi) +
+         ((1.5*np.pi<t) * (t<=2.0*np.pi)) * 1/np.cos(t-1.75*np.pi))
+    return np.cos(t) * r, np.sin(t) * r
 
+
+def animate_epicycles(x, y):
+    # compute DFT and sort by magnitude
+    z = x + 1j*y
     Z = np.fft.fft(z, N)/N
-    freqs, rads, phases = np.arange(N), np.abs(Z), np.angle(Z)
-    idx = np.argsort(-rads)
-    Z, freqs, rads, phases = Z[idx], freqs[idx], rads[idx], phases[idx]
+    freqs = np.arange(N)
+    idx = np.argsort(-np.abs(Z))
+    Z, freqs = Z[idx], freqs[idx]
 
-    rad_min = 0.01
-
-    wave = []
-    t = 0
-    dt = 2*np.pi/len(Z)
-    cc = np.exp(1j*np.linspace(0, 2*np.pi, 64))
-
-    plt.ion()
-    orig_plot = plt.plot(x_orig, y_orig, 'gray', linewidth=1)[0]
+    # set up plot stuff
+    trace = []
+    orig_plot = plt.plot(x, y, 'gray', linewidth=1)[0]
     rad_plot = plt.plot([], [], 'k-')[0]
-    wave_plot = plt.plot([], [], 'r-')[0]
+    trace_plot = plt.plot([], [], 'r-')[0]
     circle_plots = []
-    for k in range(N):
+    for i in range(N):
         circle_plots.append(plt.plot([], [], 'g-', linewidth=1)[0])
     plt.axis('equal')
 
-    for k in range(len(Z)):
-        x, y = 0, 0
-        centers, xs, ys = [], [], []
+    # animate
+    for n in range(len(Z)):
+        # compute the IDFT sum, but with descending magnitudes
+        centers = np.pad(np.cumsum(Z * np.exp(1j * freqs * t[n])), [1, 0])
+
+        # update plot data
+        rad_plot.set_data(centers.real, centers.imag)
         for i in range(N):
-            prevx, prevy = x, y
-            x = x + rads[i] * np.cos(freqs[i] * t + phases[i])
-            y = y + rads[i] * np.sin(freqs[i] * t + phases[i])
-            xs.append(x)
-            ys.append(y)
-            centers.append([prevx, prevy])
+            circle_plots[i].set_data(np.abs(Z[i])*np.cos(t) + centers[i].real,
+                                     np.abs(Z[i])*np.sin(t) + centers[i].imag)
 
-        rad_plot.set_data(xs, ys)
-        for i in range(N):
-            xx = rads[i] * cc.real + centers[i][0]
-            yy = rads[i] * cc.imag + centers[i][1]
-            circle_plots[i].set_data(xx, yy)
-
-        t += dt
-
-        wave.append([x, y])
-
-        wave_plot.set_data(*zip(*wave))
+        trace.append([centers[-1].real, centers[-1].imag])
+        trace_plot.set_data(*zip(*trace))
         plt.draw()
         plt.pause(0.1)
 
