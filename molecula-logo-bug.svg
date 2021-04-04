@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265.39 48.27">
+   <defs>
+      <style>.cls-1{fill:#004379;}.cls-2{fill:#c3d3dc;}.cls-3{fill:#48b5cd;}.cls-4{fill:#ff0000;}</style>
+   </defs>
+   <title>molecula-logo</title>
+   <g id="Layer_2" data-name="Layer 2">
+      <g id="art">
+         <path desc="bug-layer-3" class="cls-2" d="M22.46.32a2.38,2.38,0,0,0-2.38,4.13L37.7,14.65V35a2.38,2.38,0,0,0,4.76,0V11.9Z" />
+         <path desc="bug-layer-2" class="cls-3" d="M9.78,6.62a2.37,2.37,0,0,0,.87,3.25L28.27,20.08V40.45a2.39,2.39,0,0,0,4.77,0V17.33L13,5.75A2.39,2.39,0,0,0,9.78,6.62Z" />
+         <path desc="bug-layer-1" class="cls-1" d="M.32,12.09A2.33,2.33,0,0,0,0,13.22C0,13.43,0,35,0,35A2.39,2.39,0,0,0,4.8,35V17.43l4.62,2.68V40.47a2.38,2.38,0,0,0,4.76,0V22.87l4.66,2.7V45.89a2.39,2.39,0,0,0,4.77,0V22.82l-20-11.6A2.39,2.39,0,0,0,.32,12.09Z" />
+      </g>
+   </g>
+</svg>
+
