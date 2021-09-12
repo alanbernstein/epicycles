@@ -1,3 +1,7 @@
+## Example
+
+![Epicycle example](epicycles.gif)
+
 ## How it works
 
 The first time I saw one of those epicycle drawing animations (https://www.youtube.com/watch?v=QVuU2YCwHjw), I immediately knew it was 99% explained by Fourier decomposition, but it never *quite* made sense to me how the animation was generated. I finally dedicated a few minutes to understanding it, so I could implement it myself and experiment with it.
