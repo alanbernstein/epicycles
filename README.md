@@ -10,24 +10,31 @@ I found a lot of example implementations that were inscrutable due to being writ
 
 In short:
 
+<!--
+latex in github markdown is neat, has some idiosyncracies...
+- "*2*", previously indicating multiplication in a code block, breaks the renderer
+- \sum with subscript and superscript doesn't work well for inline expressions
+- "\\{" for curly braces, not sure if i've seen that elsewhere or just got lucky and guessed it
+- how to define custom function names like \fft?
+-->
+
 1. Think of the 2d path as a "1d complex" signal
 
-  - `x, y = f(t), g(t)`
-  - `z = f(t) + j*g(t)`
-  - `Z = fft(z)`
+  - $x, y = f[n], g[n]$
+  - $z[n] = f[n] + j*g[n]$
+  - $Z[k] = \mathscr{F}\\{z[n]\\}$
    
 2. Write the inverse transform in terms of the fourier series magnitudes and phases:
+  - $z[n] = \sum Z[k] e^{j 2 \pi k n / N}$
+  - $z[n] = \sum |Z[k]| \cdot e^{j \angle{Z}} \cdot e^{j 2 \pi k n / N}$
 
-  - `z[n] = sum(Z[k] * exp(1j*2*pi/N * k * n))  # note this is pythonish pseudocode`
-  - `z[n] = sum(magnitude[k] * exp(1j*2*pi/N*k*phase[k]) * exp(1j*2*pi/N * k * n))`
-
-Where `magnitude[n]` is equivalent to the radius of the circle that spins with frequency n.
+Where $|Z[k]|$ is the radius of the circle that spins with frequency k.
 
 Normally, I think of the frequency `k` as the focus of this equation - the *frequency* identifying each of the "frequency components" - while Z[k] is the complex magnitude corresponding to that frequency `k`. This understanding is still accurate of course, but it obscures the next step:
 
 3. Sort the components by *descending magnitude* instead of by *ascending frequency*, then draw the circles in that order.
 
-This is a nonlinear operation, something you would never consider as part of LTI theory (the basis of half of my education). It's not really useful in analysis of linear systems, or anything else that I'm aware of, it's just a neat trick for fancy-looking animations.
+This is a kind of nonlinear operation, something you would never consider as part of LTI theory (the basis of half of my education). It's not really useful in analysis of linear systems, or anything else that I'm aware of, it's just a neat trick for fancy-looking animations.
 
 ## Why I was curious
 I found myself trying to figure out an algorithm for smoothing a polyline for CNC inlay cuts, which means it needs to be modified such that the cutting tool (a cylinder of diameter D, perhaps 1/4") is able to cut every section of it, from both sides. This means:
