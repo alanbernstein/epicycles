@@ -21,7 +21,7 @@ latex in github markdown is neat, has some idiosyncracies...
 1. Think of the 2d path as a "1d complex" signal
 
   - $x, y = f[n], g[n]$
-  - $z[n] = f[n] + j*g[n]$
+  - $z[n] = f[n] + jg[n]$
   - $Z[k] = \mathscr{F}\\{z[n]\\}$
    
 2. Write the inverse transform in terms of the fourier series magnitudes and phases:
